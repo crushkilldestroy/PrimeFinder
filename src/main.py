@@ -1,5 +1,6 @@
 # import modules
 import sys
+from timeit import default_timer as timer
 import numpy as np
 
 
@@ -10,6 +11,11 @@ import numpy as np
 # Initialize a list
 class OptimusPrime:
     def __init__(self):
+        # declare a separator bar
+        self.sep_bar = """
+------------------------------------------------------------------------------------------------------------------------
+        """
+
         # declare range defaults
         self.default_start = 2
         self.default_finish = 29
@@ -24,19 +30,27 @@ class OptimusPrime:
             finish = self.default_finish
             print(f"unconfigured arguments, defaulting to ({start}, {finish})")
 
+        print("\n")
+        print(self.sep_bar)
         print(f"Beginning search for prime numbers within range ({start}, {finish})")
-        for possiblePrime in range(start, finish+1):
+        print(self.sep_bar)
+
+        # start timeit timer to determine performance of
+        timer_start = timer()
+
+        # start for loop to find primes
+        for possible_prime in range(start, finish + 1):
 
             # Assume number is prime until shown it is not.
             is_prime = True
-            for num in range(2, possiblePrime):
-                if possiblePrime % num == 0:
+            for num in range(2, possible_prime):
+                if possible_prime % num == 0:
                     is_prime = False
                     break
 
             # add prime numbers to list and print in place
             if is_prime:
-                self.primes.append(possiblePrime)
+                self.primes.append(possible_prime)
                 sys.stdout.write("\r" + "Processing Primes: " + str(self.primes[-1]))
 
         # force next line after for loop to line down from stdout output
@@ -46,9 +60,16 @@ class OptimusPrime:
         df = np.array(self.primes)
         print(df)
 
-        # save array to file, (dirty)
+        # end timer and print statistics
+        timer_end = timer()
+        print(f"\nFound {len(self.primes)} prime numbers within range ({start} and {finish}) "
+              f"and dumped values into an np.array in ({round(timer_end - timer_start, 4)} seconds)")
+        print(self.sep_bar)
+
+        # save array to file, (dirty but works)
         if store is True:
             file_format = ".txt"
+
             np.savetxt(f'{filename}({start}_{finish}){file_format}',
                        df,  # dirty
                        fmt="%d")
@@ -61,9 +82,9 @@ if __name__ == "__main__":
     op = OptimusPrime()
 
     # say hello
-    print("------------------------")
+    print(op.sep_bar)
     print("Welcome to PrimeFinder!")
-    print("------------------------\n")
+    print(op.sep_bar)
     print("Find prime numbers within a range!\n")
 
     # example of OptimusPrime.get_primes() functionality
@@ -72,41 +93,51 @@ if __name__ == "__main__":
         testfile = "test_prime_file"
 
         # y/n prompt for manually selecting range
-        print("Would you like to configure the search range? (y/n)")
-        config_choice = input(" > ")
+
+        config_choice = input("Would you like to configure the search range? (y/n): ")
 
         # call manual input instead of defaults
         if config_choice == "Y" or config_choice == "y":
-            c_start = int(input("start > "))
-            c_finish = int(input("finish > "))
+            c_start = int(input("start: "))
+            c_finish = int(input("finish: "))
 
             if c_start > c_finish:
                 print("lower range cannot be larger than upper range!")
-                print("restarting test function")
+                test_file()
+
+            if c_start <= 1:
+                print("lower range cannot be less than 2!")
                 test_file()
 
         # call defaults instead of manual input
-        else:
+        elif config_choice == "N" or config_choice == "n":
             c_start = op.default_start
             c_finish = op.default_finish
 
+        else:
+            c_start = op.default_start
+            c_finish = op.default_finish
+            print(f" - Invalid input, reverting to default ({c_start}, {c_finish})\n")
+
         # y/n prompt for storing output to a .txt file in same directory
-        print("Would you like to store output to a txt file? (y/n)")
-        store_choice = input(" > ")
+        store_choice = input("Would you like to store output to a txt file? (y/n): ")
 
         if store_choice == "Y" or store_choice == "y":
             op.get_primes(start=c_start, finish=c_finish, store=True, filename=testfile)
 
         elif store_choice == "N" or store_choice == "n":
             op.get_primes(start=c_start, finish=c_finish)
+        else:
+            print(" - Invalid input, defaulting to no \n")
+            op.get_primes(start=c_start, finish=c_finish)
 
         # attempt to request another go
-        print("\nwould you like to search another range for prime numbers? (y/n)")
-        again = input(" > ")
+        again = input("\nWould you like to search another range for prime numbers? (y/n): ")
 
         if again == "Y" or again == "y":
             test_file()
         else:
+            print(" - Invalid input, exiting...")
             exit()
 
 
