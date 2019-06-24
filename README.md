@@ -1,9 +1,13 @@
 **PrimeFinder**
 -
-**Simple python3 program to find prime numbers within a range**
+**Simple python3(.7.3) program to find prime numbers within a range**
 - Designate custom ranges or use default hard coded ranges.
-- Store calculated prime numbers in text file.
-- Cry with larger numbers, see "Limitations".
+- Store calculated prime numbers in text file with unique naming scheme per range.
+- Timer included.
+
+
+- Cry with larger numbers, see "Limitations(1)".
+    - Includes plenty of convoluted dirty code!
 
 <br>
 
