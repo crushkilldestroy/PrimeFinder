@@ -48,10 +48,14 @@ class OptimusPrime:
                     is_prime = False
                     break
 
-            # add prime numbers to list and print in place
+            # add prime numbers to list and print current value in place with completion percentage
             if is_prime:
                 self.primes.append(possible_prime)
-                sys.stdout.write("\r" + "Processing Primes: " + str(self.primes[-1]))
+                sys.stdout.write("\r" + "Processing Primes: " + str(self.primes[-1]) +
+                                 " (" + str(round(int(self.primes[-1]) / int(finish+1) * 100, 2)) + "%)")
+
+        # need to force stdout output change to "100%" upon loop completion due to dirty code.
+        sys.stdout.write("\r" + "Processing Primes: " + str(self.primes[-1]) + " (100%)")
 
         # force next line after for loop to line down from stdout output
         print("\n")
@@ -63,7 +67,7 @@ class OptimusPrime:
         # end timer and print statistics
         timer_end = timer()
         print(f"\nFound {len(self.primes)} prime numbers within range ({start} and {finish}) "
-              f"and dumped values into an np.array in ({round(timer_end - timer_start, 4)} seconds)")
+              f"and dumped values into an np.array in ({round(timer_end - timer_start, 6)} seconds)")
         print(self.sep_bar)
 
         # save array to file, (dirty but works)
@@ -136,6 +140,11 @@ if __name__ == "__main__":
 
         if again == "Y" or again == "y":
             test_file()
+
+        elif again == "N" or again == "n":
+            print("Exiting...")
+            exit()
+
         else:
             print(" - Invalid input, exiting...")
             exit()
