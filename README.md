@@ -13,6 +13,5 @@
     when around 60,000,000 on an AMD Ryzen 1700x 
 
 <br>
--
 
-Anyway, if you find the code of any use, enjoy.
+**Anyway, if you find the code of any use, enjoy!**
