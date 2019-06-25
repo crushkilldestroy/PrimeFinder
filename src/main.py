@@ -51,11 +51,14 @@ class OptimusPrime:
             # add prime numbers to list and print current value in place with completion percentage
             if is_prime:
                 self.primes.append(possible_prime)
-                sys.stdout.write("\r" + "Processing Primes: " + str(self.primes[-1]) +
-                                 " (" + str(round(int(self.primes[-1]) / int(finish+1) * 100, 2)) + "%)")
+                sys.stdout.write("\r" + f"Processing Primes: {str(self.primes[-1])} ({str(round(int(self.primes[-1] - start) / int(finish+1 - start) * 100, 2))}%)")
+                sys.stdout.flush()
 
         # need to force stdout output change to "100%" upon loop completion due to dirty code.
-        sys.stdout.write("\r" + "Processing Primes: " + str(self.primes[-1]) + " (100%)")
+        sys.stdout.write("\r" + "                                      ")
+        sys.stdout.flush()
+        sys.stdout.write("\r" + f"Processing Primes: {str(self.primes[-1])} ({str(100)}%)")
+        sys.stdout.flush()
 
         # force next line after for loop to line down from stdout output
         print("\n")
