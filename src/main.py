@@ -23,6 +23,21 @@ class OptimusPrime:
         # declare empty self.primes list for use by class
         self.primes = []
 
+    @staticmethod
+    def print_progress(p, s=None, f=None, done=False):
+        if done is False:
+            # equation for a rough percentage
+            percent = (p - s) / (f + 1 - s) * 100
+
+            # stdout.write to write information on same line repeatedly
+            sys.stdout.write("\r" + "Processing Primes: " + f"{str(p)} ({str(round(percent, 2))}%)")
+            sys.stdout.flush()
+
+        elif done is True:
+            # insure that when the loop finishes, it says 100% since the above equation will never reach 100%
+            sys.stdout.write("\r" + "Processing Complete: " + f"{str(p)} (100%)")
+            sys.stdout.flush()
+
     def get_primes(self, start=None, finish=None, store=False, filename=None):
         # catch empty arguments and insert defaults
         if start is None or finish is None:
@@ -51,14 +66,10 @@ class OptimusPrime:
             # add prime numbers to list and print current value in place with completion percentage
             if is_prime:
                 self.primes.append(possible_prime)
-                sys.stdout.write("\r" + f"Processing Primes: {str(self.primes[-1])} ({str(round(int(self.primes[-1] - start) / int(finish+1 - start) * 100, 2))}%)")
-                sys.stdout.flush()
+                self.print_progress(p=self.primes[-1], s=start, f=finish)
 
         # need to force stdout output change to "100%" upon loop completion due to dirty code.
-        sys.stdout.write("\r" + "                                      ")
-        sys.stdout.flush()
-        sys.stdout.write("\r" + f"Processing Primes: {str(self.primes[-1])} ({str(100)}%)")
-        sys.stdout.flush()
+        self.print_progress(p=self.primes[-1], done=True)
 
         # force next line after for loop to line down from stdout output
         print("\n")
@@ -73,7 +84,7 @@ class OptimusPrime:
               f"and dumped values into an np.array in ({round(timer_end - timer_start, 6)} seconds)")
         print(self.sep_bar)
 
-        # save array to file, (dirty but works)
+        # save array to file, (dirty (it wants an int instead of an array) but it works, regardless)
         if store is True:
             file_format = ".txt"
 
